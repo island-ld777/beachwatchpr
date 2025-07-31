@@ -10,23 +10,12 @@ import { ReportForm } from "./ReportForm";
 
 const PR_COORDINATES = [-66.664513, 18.200178];
 
-const popupStyle = {
-  position: "absolute",
-  backgroundColor: "white",
-  padding: "5px",
-  borderRadius: "5px",
-  border: "1px solid black",
-  transform: "translate(-50%, -100%)",
-  pointerEvents: "none",
-  width: "220px",
-  color: "black"
-};
-
 export default function MainMap() {
 
     const mapRef = useRef();
     const popupRef = useRef();
     const [popupRender, setPopupRender] = useState(null);
+    const [reportModal, setReportModal] = useState(false);
 
 
     useEffect(() => {
@@ -55,7 +44,7 @@ export default function MainMap() {
         });
 
         map.on("singleclick", (e) => {
-            console.log(overlay.getElement());
+            setReportModal(false);
             const coordinates = toLonLat(e.coordinate);
             setPopupRender(coordinates);
             overlay.setPosition(e.coordinate);
@@ -77,10 +66,25 @@ export default function MainMap() {
         {popupRender && (
             <>
             <p>LAT: {popupRender[1]} LON: {popupRender[0]}</p>
-            <ReportForm/>
+            <button onClick={() => setReportModal(true)}>Report</button>
+            {reportModal && (
+                <ReportForm onClose={() => setReportModal(false)}/>
+            )
+            }
             </>
         )}
     </div>
 </div>
 );
 }
+
+const popupStyle = {
+  position: "absolute",
+  backgroundColor: "white",
+  padding: "5px",
+  borderRadius: "5px",
+  border: "1px solid black",
+  transform: "translate(-50%, -100%)",
+  width: "220px",
+  color: "black"
+};
