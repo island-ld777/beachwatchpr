@@ -4,11 +4,12 @@ import View from "ol/View.js";
 import TileLayer from "ol/layer/Tile.js";
 import OSM from "ol/source/OSM";
 import {fromLonLat, toLonLat} from 'ol/proj';
-import "ol/ol.css";
 import Overlay from "ol/Overlay.js";
 import { ReportForm } from "./ReportForm";
+import "ol/ol.css";
+import "../css/MainMap.css"
 
-const PR_COORDINATES = [-66.664513, 18.200178];
+const PR_COORDINATES = [-66.5, 18.2];
 
 export default function MainMap() {
 
@@ -39,7 +40,7 @@ export default function MainMap() {
             overlays: [overlay],
             view: new View({
                 center: fromLonLat(PR_COORDINATES),
-                zoom: 7,
+                zoom: 9,
             }),
         });
 
@@ -62,7 +63,7 @@ export default function MainMap() {
     id="map"
     style={{height: "400px"}}/>
 
-    <div ref={popupRef} className="ol-popup" style={popupStyle}>
+    <div ref={popupRef} className="ol-popup custom-popup">
         {popupRender && (
             <>
             <p>LAT: {popupRender[1]} LON: {popupRender[0]}</p>
@@ -78,13 +79,3 @@ export default function MainMap() {
 );
 }
 
-const popupStyle = {
-  position: "absolute",
-  backgroundColor: "white",
-  padding: "5px",
-  borderRadius: "5px",
-  border: "1px solid black",
-  transform: "translate(-50%, -100%)",
-  width: "220px",
-  color: "black"
-};
