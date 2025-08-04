@@ -5,7 +5,6 @@ export default function Home() {
     return (
         <div className="home">
             <NavBar/>
-            <h1>BeachWatchPR</h1>
             <MainMap/>
         </div>
     );
