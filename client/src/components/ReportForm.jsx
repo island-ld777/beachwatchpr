@@ -12,22 +12,25 @@ export function ReportForm({onClose}) {
 
     return (
         <>
-    <div style={styles.overlay}>
-      <div style={styles.modal}>
-        <button style={styles.closeButton} onClick={onClose}>
-          X
-        </button>
-        <form onSubmit={handleSubmit}>
-            <label>E-Mail:
+    <div className="overlay">
+      <div className="modal">
+        <p className="underline text-2xl mb-3.5 text-center">Report Form</p>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <label className="flex flex-col">E-Mail:
                 <input
+                className="border"
+                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autocomplete="off"
                 required
                 /> 
             </label>
-            <label>Category: 
-                <select 
+            <label className="flex flex-col">Category: 
+                <select
+                className="border"
+                name="category" 
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 required>
@@ -37,50 +40,23 @@ export function ReportForm({onClose}) {
                     <option value="blocked_access">Blocked Access</option>
                 </select>
             </label>
-            <label>Description:
+            <label className="flex flex-col">Description:
                 <input
+                className="border"
+                name="description"
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
                 />
             </label>
-            <input type="submit"/>
+            <div className="flex justify-between gap-2">
+              <button onClick={onClose}>Close</button>
+              <button className="bg-cyan-500 border-cyan-500 rounded-sm  hover:bg-blue-700 " type="submit">Submit</button>
+            </div>
         </form>
       </div>
     </div>
         </>
     );
-};
-
-
-const styles = {
-  overlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  modal: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    position: "relative",
-    width: "80%",
-    maxWidth: "500px"
-  },
-  closeButton: {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-    background: "transparent",
-    border: "none",
-    fontSize: "18px",
-    cursor: "pointer"
-  }
 };
