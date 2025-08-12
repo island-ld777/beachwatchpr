@@ -6,7 +6,7 @@ import {Routes, Route} from 'react-router-dom';
 function App() {
 
   return (
-    <main className="main-content">
+    <main className="h-screen">
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/admin" element={<Admin/>}/>

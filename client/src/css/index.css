@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #0082f3;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@layer base {
+
+  html, body, #root {
+    @apply h-[100%] m-0;
+  }
+
+  :root {
+    @apply font-[system-ui,Avenir,Helvetica,Arial,sans-serif] leading-[1.5] font-normal text-white/[87] bg-[#242424] antialiased;
+    color-scheme: light dark;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    @apply font-medium text-[#000000] no-underline;
+  }
+
+  a:hover {
+    @apply text-[#535bf2];
+  }
+
+  h1 {
+    @apply text-[3.2em] leading-[1.1];
+  }
+
+  button {
+    @apply rounded-lg border border-transparent py-[0.6em] px-[1.2em] text-base font-medium bg-[#afafaf] cursor-pointer transition-[border-color_0.25s];
+    font-family: inherit;
+  }
+
+  button:hover {
+    @apply border-[#646cff];
+  }
+
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+}
+
+
+
+@layer components {
+  .main-map {
+    @apply w-auto h-[32rem];
+  }
+
+  .map-popup {
+  @apply  bg-white p-[10px] rounded-[5px] border border-solid border-black -translate-x-1/2 -translate-y-full w-[220px] text-black
+  }
+  .overlay {
+    @apply
+ fixed inset-0 bg-black/70 flex items-center justify-center;
+  }  
+  .modal {
+    @apply
+ bg-white p-[20px] rounded-lg relative ;
+  }  
+  .close-button {
+    @apply
+ absolute top-[10px] right-[10px] bg-transparent border-none text-[18px] cursor-pointer;
+  }
+}

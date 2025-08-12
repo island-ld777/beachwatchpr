@@ -4,11 +4,11 @@ import View from "ol/View.js";
 import TileLayer from "ol/layer/Tile.js";
 import OSM from "ol/source/OSM";
 import {fromLonLat, toLonLat} from 'ol/proj';
-import "ol/ol.css";
 import Overlay from "ol/Overlay.js";
 import { ReportForm } from "./ReportForm";
+import "ol/ol.css";
 
-const PR_COORDINATES = [-66.664513, 18.200178];
+const PR_COORDINATES = [-66.5, 18.2];
 
 export default function MainMap() {
 
@@ -39,13 +39,14 @@ export default function MainMap() {
             overlays: [overlay],
             view: new View({
                 center: fromLonLat(PR_COORDINATES),
-                zoom: 7,
+                zoom: 9,
             }),
         });
 
         map.on("singleclick", (e) => {
             setReportModal(false);
             const coordinates = toLonLat(e.coordinate);
+            popupRef.current.style.display = 'block';
             setPopupRender(coordinates);
             overlay.setPosition(e.coordinate);
         });
@@ -60,31 +61,31 @@ export default function MainMap() {
     <div 
     ref={mapRef}
     id="map"
-    style={{height: "400px"}}/>
+    className="main-map"
+    />
 
-    <div ref={popupRef} className="ol-popup" style={popupStyle}>
+    <div ref={popupRef} className="map-popup">
         {popupRender && (
-            <>
+            <div className="map-popup-content">
+            <p className="underline text-2xl text-center mb-3">Coordinates</p>
+            
             <p>LAT: {popupRender[1]} LON: {popupRender[0]}</p>
-            <button onClick={() => setReportModal(true)}>Report</button>
+        
+        <div className="flex justify-between mt-3">
+        <button onClick={() => setReportModal(true)}>Report</button>
             {reportModal && (
                 <ReportForm onClose={() => setReportModal(false)}/>
             )
-            }
-            </>
+        }
+        <button onClick={() => {
+            setPopupRender(false);
+            popupRef.current.style.display = 'none';
+        }}>Close</button>
+        </div>
+        </div>
         )}
     </div>
 </div>
 );
 }
 
-const popupStyle = {
-  position: "absolute",
-  backgroundColor: "white",
-  padding: "5px",
-  borderRadius: "5px",
-  border: "1px solid black",
-  transform: "translate(-50%, -100%)",
-  width: "220px",
-  color: "black"
-};
