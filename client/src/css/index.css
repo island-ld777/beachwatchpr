@@ -51,6 +51,15 @@
   button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
   }
+
+  th {
+    @apply px-4 py-2 text-left font-semibold;
+  }
+
+  td {
+    @apply px-4 py-2;
+  }
+
 }
 
 

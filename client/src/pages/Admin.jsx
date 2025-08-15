@@ -1,10 +1,14 @@
+import MainMap from "../components/MainMap";
 import { NavBar } from "../components/NavBar";
+import { ReportList } from "../components/ReportList";
 
 export default function Admin() {
     return (
         <div className="admin">
             <NavBar/>
-            ADMIN PAGE GOES HERE
+            <MainMap/>
+            <br></br>
+            <ReportList/>
         </div>
     );
 }
