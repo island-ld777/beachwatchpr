@@ -4,10 +4,22 @@ export function ReportForm({onClose}) {
     const [email, setEmail] = useState("");
     const [category, setCategory] = useState("pollution");
     const [description, setDescription] = useState("");
+    const [images, setImages] = useState([]);
+
+    const handleImageChange = (e) => {
+        setImages([...e.target.files]);
+    };
 
     const handleSubmit = (e) => {
     e.preventDefault();
-    console.log([email, category, description]);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("category", category);
+    formData.append("description", description);
+    images.forEach((img) => formData.append("images", img));
+    //SEND TO BACK END LINE GOES HERE
+    console.log([email, category, description, images]);
+    onClose();
 }
 
     return (
@@ -50,6 +62,21 @@ export function ReportForm({onClose}) {
                 required
                 />
             </label>
+            <label className="flex flex-col">Upload Images:
+                <input
+                    className="border"
+                    name="images"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    />
+            </label>
+            <div className="flex flex-wrap gap-2">
+                {Array.from(images).map((img, idx) => (
+                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">{img.name}</span>
+                ))}
+            </div>
             <div className="flex justify-between gap-2">
               <button onClick={onClose}>Close</button>
               <button className="bg-cyan-500 border-cyan-500 rounded-sm  hover:bg-blue-700 " type="submit">Submit</button>
