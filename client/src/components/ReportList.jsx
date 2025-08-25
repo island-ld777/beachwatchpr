@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { ReportValidationModal } from "./ReportValidationModal";
 import { ViewImagesModal } from "./ViewImagesModal";
@@ -17,7 +16,6 @@ export function ReportList() {
             setReports([]);
         });
     }, []);
-    
 
     return (
         <>
@@ -48,7 +46,6 @@ export function ReportList() {
                             {reports.map((report) => (
                                 <tr key={report.id} className="border-t bg-gray-50">
                                     <td>{report.id}</td>
-
                                     <td>{report.status || "-"}</td>
                                     <td>{report.created_at ? new Date(report.created_at).toLocaleString() : "-"}</td>
                                     <td>{report.expiration_date ? new Date(report.expiration_date).toLocaleDateString() : "-"}</td>
@@ -75,7 +72,6 @@ export function ReportList() {
                                     </td>
                                     <td>{report.validated_by || "-"}</td>
                                     <td>{report.validated_at ? new Date(report.validated_at).toLocaleString() : "-"}</td>
-
                                 </tr>
                             ))}
                         </tbody>

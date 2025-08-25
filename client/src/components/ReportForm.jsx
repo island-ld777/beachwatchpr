@@ -1,8 +1,8 @@
 import { useState } from "react";
+
 import {submitData} from "../utils/dataHandler";
 
 export function ReportForm({onClose, coordinates}) {
-
     const [email, setEmail] = useState("");
     const [category, setCategory] = useState("pollution");
     const [description, setDescription] = useState("");
@@ -24,7 +24,6 @@ export function ReportForm({onClose, coordinates}) {
     }
     //images.forEach((img) => formData.append("images", img));
     submitData(data);
-
     onClose();
 }
 
