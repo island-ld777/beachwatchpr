@@ -10,12 +10,17 @@ const pool = new Pool({
 });
 
 const connectDB = async () => {
+    let client;
     try {
-        await pool.connect();
+        client = await pool.connect();
         console.log('Connected to PostgreSQL database');
     } catch (error) {
         console.error('Database connection error:', error);
         process.exit(1);
+    } finally {
+        if (client) {
+            client.release();
+        }
     }
 };
 

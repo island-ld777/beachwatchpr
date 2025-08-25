@@ -1,4 +1,5 @@
 class ReportsController {
+
     constructor(db) {
         this.db = db;
     }
@@ -69,4 +70,4 @@ class ReportsController {
     }
 }
 
-export default ReportsController;
+module.exports = ReportsController;
