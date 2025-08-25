@@ -1,46 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReportValidationModal } from "./ReportValidationModal";
 import { ViewImagesModal } from "./ViewImagesModal";
 
 export function ReportList() {
+    const [reports, setReports] = useState([]);
     const [validateReportModal, setValidateReportModal] = useState(null);
     const [viewImagesModal, setViewImagesModal] = useState(null);
 
-    /*
-    NOTE: This is placeholder data before backend will be implemented.
-    */
-    const reports = [
-        {
-            id: 1,
-            lat: 18.48,
-            lon: -66.43,
-            email: "johnsmith@gmail.com",
-            category: "Pollution",
-            description: "Saw pickup trucks dump trash on the coast.",
-            images: ["https://placehold.co/600x400/orange/white", "https://placehold.co/600x400/red/white"]
-        },
-        {
-            id: 2,
-            lat: 18.47,
-            lon: -66.25,
-            email: "johnsmith@gmail.com",
-            category: "Blocked Access",
-            description: "Government signs negating access to the area.",
-            images: ["https://placehold.co/600x400/green/white"]
-        },
-    ];
-
+    useEffect(() => {
+        fetch("http://localhost:5000/api/reports/")
+        .then((res) => res.json())
+        .then((data) => setReports(data))
+        .catch((err) => {
+            console.error("Failed to fetch reports: ", err);
+            setReports([]);
+        });
+    }, []);
+    
     return (
         <>
             <h2 className="text-xl font-bold m-2 bg-gray-50 text-center">
                 User Reports
             </h2>
             <div className="flex justify-center items-start">
-                <div className="overflow-x-scroll w-full max-w-4xl">
+                <div className="overflow-x-scroll w-full">
                     <table>
                         <thead>
                             <tr className="bg-gray-100">
                                 <th>ID</th>
+                                <th>Status</th>
+                                <th>Creation Date</th>
+                                <th>Expiration Date</th>
                                 <th>Lat</th>
                                 <th>Long</th>
                                 <th>Email</th>
@@ -48,14 +38,19 @@ export function ReportList() {
                                 <th>Description</th>
                                 <th>Images</th>
                                 <th></th>
+                                <th>Validated By</th>
+                                <th>Validated At</th>
                             </tr>
                         </thead>
                         <tbody>
                             {reports.map((report) => (
                                 <tr key={report.id} className="border-t bg-gray-50">
                                     <td>{report.id}</td>
-                                    <td>{report.lat}</td>
-                                    <td>{report.lon}</td>
+                                    <td>{report.status || "-"}</td>
+                                    <td>{report.created_at ? new Date(report.created_at).toLocaleString() : "-"}</td>
+                                    <td>{report.expiration_date ? new Date(report.expiration_date).toLocaleDateString() : "-"}</td>
+                                    <td>{report.latitude}</td>
+                                    <td>{report.longitude}</td>
                                     <td>{report.email}</td>
                                     <td>{report.category}</td>
                                     <td>{report.description}</td>
@@ -75,6 +70,8 @@ export function ReportList() {
                                             Validate
                                         </button>
                                     </td>
+                                    <td>{report.validated_by || "-"}</td>
+                                    <td>{report.validated_at ? new Date(report.validated_at).toLocaleString() : "-"}</td>
                                 </tr>
                             ))}
                         </tbody>
