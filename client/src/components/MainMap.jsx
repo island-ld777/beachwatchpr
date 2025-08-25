@@ -74,7 +74,7 @@ export default function MainMap() {
         <div className="flex justify-between mt-3">
         <button onClick={() => setReportModal(true)}>Report</button>
             {reportModal && (
-                <ReportForm onClose={() => setReportModal(false)}/>
+                <ReportForm onClose={() => setReportModal(false)} coordinates={[popupRender[1], popupRender[0]]}/>
             )
         }
         <button onClick={() => {
