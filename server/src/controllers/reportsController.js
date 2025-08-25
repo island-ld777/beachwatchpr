@@ -5,14 +5,15 @@ class ReportsController {
     }
 
     async createReport(req, res) {
-        const { title, description } = req.body;
+        const { email, category, description, latitude, longitude } = req.body;
         try {
             const result = await this.db.query(
-                'INSERT INTO reports (title, description) VALUES ($1, $2) RETURNING *',
-                [title, description]
+                'INSERT INTO reports (email, category, description, latitude, longitude) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                [email, category, description, latitude, longitude]
             );
             res.status(201).json(result.rows[0]);
         } catch (error) {
+            console.error("Error creating report: ", error);
             res.status(500).json({ error: 'Failed to create report' });
         }
     }

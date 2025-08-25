@@ -1,6 +1,7 @@
 import { useState } from "react";
+import {submitData} from "../utils/dataHandler";
 
-export function ReportForm({onClose}) {
+export function ReportForm({onClose, coordinates}) {
     const [email, setEmail] = useState("");
     const [category, setCategory] = useState("pollution");
     const [description, setDescription] = useState("");
@@ -12,13 +13,15 @@ export function ReportForm({onClose}) {
 
     const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("category", category);
-    formData.append("description", description);
-    images.forEach((img) => formData.append("images", img));
-    //SEND TO BACK END LINE GOES HERE
-    console.log([email, category, description, images]);
+    const data = {
+    "email": email,
+    "category": category,
+    "description": description,
+    "latitude": coordinates[0],
+    "longitude": coordinates[1]
+    }
+    //images.forEach((img) => formData.append("images", img));
+    submitData(data);
     onClose();
 }
 
@@ -35,7 +38,7 @@ export function ReportForm({onClose}) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                autocomplete="off"
+                autoComplete="off"
                 required
                 /> 
             </label>
@@ -46,10 +49,10 @@ export function ReportForm({onClose}) {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 required>
-                    <option value="pollution">Pollution</option>
-                    <option value="illegal_construction">Illegal Construction</option>
-                    <option value="land_clearing">Land Clearing</option>
-                    <option value="blocked_access">Blocked Access</option>
+                    <option value="Pollution">Pollution</option>
+                    <option value="Illegal Construction">Illegal Construction</option>
+                    <option value="Land Clearing">Land Clearing</option>
+                    <option value="Blocked Access">Blocked Access</option>
                 </select>
             </label>
             <label className="flex flex-col">Description:
