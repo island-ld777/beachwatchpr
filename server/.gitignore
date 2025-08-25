@@ -24,3 +24,5 @@ coverage/
 
 #package-lock
 package-lock.json
+
+bfg-1.14.0.jar
