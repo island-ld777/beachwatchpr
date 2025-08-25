@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const ReportsController = require('../controllers/reportsController');
+const {pool} = require("../db/index");
 
-const reportsController = new ReportsController();
+const reportsController = new ReportsController(pool);
 
 router.post('/', reportsController.createReport.bind(reportsController));
 router.get('/', reportsController.getReports.bind(reportsController));
