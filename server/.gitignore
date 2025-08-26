@@ -26,3 +26,6 @@ coverage/
 package-lock.json
 
 bfg-1.14.0.jar
+
+# Uploads directory
+uploads/

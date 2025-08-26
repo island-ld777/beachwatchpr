@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const reportsRoutes = require('./routes/reports');
 const errorHandler = require('./middleware/errorHandler');
 const db = require('./db/index');
@@ -16,6 +17,7 @@ let corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use('/api/reports', reportsRoutes);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use(errorHandler);
 
 db.connectDB()
