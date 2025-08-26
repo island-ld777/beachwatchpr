@@ -70,3 +70,19 @@ export async function validateReport(reportId, status) {
         throw error;
     }
 }
+
+export async function getValidatedReports() {
+    try {
+        const response = await fetch("http://localhost:5000/api/reports");
+
+        if (!response.ok){
+            throw new Error(`HTTP error status: ${response.status}`);
+        }
+
+        const reports = await response.json();
+        return reports.filter(report => report.status === 'validated');
+    } catch (error) {
+        console.error('Error fetching validated reports:', error);
+        throw error;
+    }
+}
