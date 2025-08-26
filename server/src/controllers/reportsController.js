@@ -33,11 +33,39 @@ class ReportsController {
             const completeReport = await this.getCompleteReport(reportId);
             res.status(201).json(completeReport);
 
-
         } catch (error) {
             await this.db.query('ROLLBACK');
             console.error("Error creating report: ", error);
             res.status(500).json({ error: 'Failed to create report' });
+        }
+    }
+
+    async validateReport(req, res) {
+        const { id } = req.params;
+        const { status } = req.body; // 'validated' or 'rejected'
+        
+        try {
+            // Validate status input
+            if (!['validated', 'rejected'].includes(status)) {
+                return res.status(400).json({ error: 'Invalid status. Must be "validated" or "rejected"' });
+            }
+
+            const result = await this.db.query(
+                'UPDATE reports SET status = $1, validated_at = CURRENT_TIMESTAMP WHERE id = $2 AND status = $3 RETURNING *',
+                [status, id, 'pending']
+            );
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Report not found or not in pending status' });
+            }
+
+            // Get complete report with images
+            const completeReport = await this.getCompleteReport(id);
+            res.status(200).json(completeReport);
+
+        } catch (error) {
+            console.error("Error validating report: ", error);
+            res.status(500).json({ error: 'Failed to validate report' });
         }
     }
 
@@ -70,7 +98,6 @@ class ReportsController {
                 GROUP BY r.id
                 ORDER BY r.created_at DESC
             `);
-
 
             res.status(200).json(result.rows);
         } catch (error) {
