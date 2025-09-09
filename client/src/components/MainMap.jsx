@@ -82,14 +82,8 @@ export default function MainMap() {
         }
     };
 
+    // Create the Map upon loading
     useEffect(() => {
-        // Initialize popup elements with default hidden state
-        if (popupRef.current) {
-            popupRef.current.style.display = 'none';
-        }
-        if (reportPopupRef.current) {
-            reportPopupRef.current.style.display = 'none';
-        }
 
         const coordinateOverlay = new Overlay({
             element: popupRef.current,
@@ -98,9 +92,9 @@ export default function MainMap() {
                     duration: 250,
                 },
             },
-            positioning: 'top-center', // Changed from 'bottom-center'
-            stopEvent: true, // Changed to true to prevent map interaction
-            offset: [0, 10], // Smaller offset, positioned below the click point
+            positioning: 'top-center',
+            stopEvent: true,
+            offset: [0, 10], 
         });
 
         const reportOverlay = new Overlay({
@@ -111,9 +105,9 @@ export default function MainMap() {
                 },
                 margin: 20,
             },
-            positioning: 'top-center', // Changed from 'bottom-center'
-            stopEvent: true, // Changed to true to prevent map interaction
-            offset: [0, 15], // Smaller offset, positioned below the marker
+            positioning: 'top-center',
+            stopEvent: true,
+            offset: [0, 15], 
         });
 
         const newMap = new Map({
@@ -138,19 +132,17 @@ export default function MainMap() {
             
             // Check if click is on a feature (marker)
             const feature = newMap.forEachFeatureAtPixel(e.pixel, (feature) => {
-                console.log('Feature found:', feature.get('report')); // Debug log
+                //console.log('Feature found:', feature.get('report')); // Debug log
                 return feature;
             });
             
             if (feature && feature.get('report')) {
-                // Clicked on a report marker
-                console.log('Showing report popup'); // Debug log
+                //console.log('Showing report popup'); // Debug log
                 const report = feature.get('report');
                 setSelectedReport(report);
                 
                 // Hide coordinate popup
                 coordinateOverlay.setPosition(undefined);
-                popupRef.current.style.display = 'none';
                 setPopupRender(null);
                 
                 // Hide any open report modal
@@ -159,7 +151,6 @@ export default function MainMap() {
                 
                 // Show report popup
                 const markerCoordinate = feature.getGeometry().getCoordinates();
-                reportPopupRef.current.style.display = 'block';
                 reportOverlay.setPosition(markerCoordinate);
                 
             } else {
@@ -169,7 +160,6 @@ export default function MainMap() {
                 
                 // Hide report popup
                 reportOverlay.setPosition(undefined);
-                reportPopupRef.current.style.display = 'none';
                 setSelectedReport(null);
                 
                 // Hide any open report modal
@@ -178,7 +168,6 @@ export default function MainMap() {
                 
                 // Show coordinate popup
                 setPopupRender(coordinates);
-                popupRef.current.style.display = 'block';
                 coordinateOverlay.setPosition(e.coordinate); // Use e.coordinate directly
             }
         });
@@ -191,18 +180,13 @@ export default function MainMap() {
         };
     }, []);
 
+    //Helper Functions for OnClicks
     const closeCoordinatePopup = () => {
         setPopupRender(null);
-        if (popupRef.current) {
-            popupRef.current.style.display = 'none';
-        }
     };
 
     const closeReportPopup = () => {
         setSelectedReport(null);
-        if (reportPopupRef.current) {
-            reportPopupRef.current.style.display = 'none';
-        }
     };
 
     const handleReportClick = () => {
@@ -237,11 +221,14 @@ export default function MainMap() {
                 />
 
                 {/* Coordinate popup for creating new reports */}
-                <div ref={popupRef} className="map-popup" style={{ display: 'none' }}>
+                <div ref={popupRef} className={`map-popup ${popupRender ? 'block' : 'hidden'}`} >
                     {popupRender && (
-                        <div className="map-popup-content" style={{ userSelect: 'text', pointerEvents: 'auto' }}>
+                        <div className="map-popup-content select-text pointer-events-auto">
                             <p className="underline text-2xl text-center mb-3">Coordinates</p>
-                            <p>LAT: {parseFloat(popupRender[1]).toFixed(4)} LON: {parseFloat(popupRender[0]).toFixed(4)}</p>
+                            <div className="space-y-1 mb-3 text-center"> 
+                                <p>LAT: {parseFloat(popupRender[1]).toFixed(4)}</p>
+                                <p>LON: {parseFloat(popupRender[0]).toFixed(4)}</p>
+                            </div>
                             <div className="flex justify-between mt-3">
                                 <button 
                                     className="bg-blue-500 text-white px-3 py-1 rounded"
@@ -261,9 +248,9 @@ export default function MainMap() {
                 </div>
 
                 {/* Report details popup for validated reports */}
-                <div ref={reportPopupRef} className="map-popup" style={{ display: 'none' }}>
+                <div ref={reportPopupRef} className={`map-popup ${selectedReport ? 'block' : 'hidden'}`}>
                     {selectedReport && (
-                        <div className="map-popup-content max-w-md" style={{ userSelect: 'text', pointerEvents: 'auto' }}>
+                        <div className="map-popup-content max-w-md select-text pointer-events-auto">
                             <div className="flex justify-between items-center mb-3">
                                 <h3 
                                     className="text-xl font-bold text-white px-3 py-1 rounded"
