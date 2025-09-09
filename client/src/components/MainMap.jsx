@@ -212,32 +212,48 @@ export default function MainMap() {
 
     return (
         <>
-            <div>
+            <div className="relative">
+                {/* Fullscreen responsive map */}
                 <div 
                     ref={mapRef}
                     id="map"
-                    className="main-map"
-                    style={{ width: '100%', height: '500px' }}
+                    className="w-full h-screen"
                 />
+            
+                {/* Responsive Legend */}
+                <div className="absolute top-4 right-4 bg-white p-2 sm:p-3 rounded-lg shadow-lg border z-10 max-w-[200px] sm:max-w-none">
+                    <h4 className="font-bold text-xs sm:text-sm mb-1 sm:mb-2 text-gray-800">Report Types</h4>
+                    <div className="space-y-0.5 sm:space-y-1">
+                        {Object.entries(CATEGORY_COLORS).map(([category, color]) => (
+                            <div key={category} className="flex items-center space-x-1 sm:space-x-2 text-xs">
+                                <div 
+                                    className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-white shadow-sm flex-shrink-0"
+                                    style={{ backgroundColor: color }}
+                                ></div>
+                                <span className="text-gray-700 truncate">{category}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {/* Coordinate popup for creating new reports */}
                 <div ref={popupRef} className={`map-popup ${popupRender ? 'block' : 'hidden'}`} >
                     {popupRender && (
-                        <div className="map-popup-content select-text pointer-events-auto">
-                            <p className="underline text-2xl text-center mb-3">Coordinates</p>
-                            <div className="space-y-1 mb-3 text-center"> 
+                        <div className="map-popup-content select-text pointer-events-auto w-64 sm:w-auto">
+                            <p className="underline text-lg sm:text-2xl text-center mb-3">Coordinates</p>
+                            <div className="space-y-1 mb-3 text-center text-sm sm:text-base"> 
                                 <p>LAT: {parseFloat(popupRender[1]).toFixed(4)}</p>
                                 <p>LON: {parseFloat(popupRender[0]).toFixed(4)}</p>
                             </div>
-                            <div className="flex justify-between mt-3">
+                            <div className="flex justify-between mt-3 gap-2">
                                 <button 
-                                    className="bg-blue-500 text-white px-3 py-1 rounded"
+                                    className="bg-blue-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded text-sm sm:text-base hover:bg-blue-600 transition-colors"
                                     onClick={handleReportClick}
                                 >
                                     Report
                                 </button>
                                 <button 
-                                    className="bg-gray-500 text-white px-3 py-1 rounded"
+                                    className="bg-gray-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded text-sm sm:text-base hover:bg-gray-600 transition-colors"
                                     onClick={closeCoordinatePopup}
                                 >
                                     Close
@@ -248,19 +264,19 @@ export default function MainMap() {
                 </div>
 
                 {/* Report details popup for validated reports */}
-                <div ref={reportPopupRef} className={`map-popup ${selectedReport ? 'block' : 'hidden'}`}>
+                <div ref={reportPopupRef} className={`map-popup md:w-100 ${selectedReport ? 'block' : 'hidden'}`}>
                     {selectedReport && (
-                        <div className="map-popup-content max-w-md select-text pointer-events-auto">
+                        <div className="map-popup-content select-text pointer-events-auto">
                             <div className="flex justify-between items-center mb-3">
                                 <h3 
-                                    className="text-xl font-bold text-white px-3 py-1 rounded"
+                                    className="text-lg sm:text-xl font-bold text-white px-2 sm:px-3 py-1 rounded flex-1 mr-3 text-sm sm:text-base"
                                     style={{ backgroundColor: CATEGORY_COLORS[selectedReport.category] || '#888888' }}
                                 >
                                     {selectedReport.category}
                                 </h3>
                                 <button 
                                     onClick={closeReportPopup}
-                                    className="text-gray-500 hover:text-gray-700 text-xl"
+                                    className="text-gray-500 hover:text-gray-700 text-lg sm:text-xl w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0"
                                 >
                                     ✕
                                 </button>
@@ -268,13 +284,13 @@ export default function MainMap() {
                             
                             <div className="space-y-3">
                                 <div>
-                                    <strong>Description:</strong>
-                                    <p className="mt-1 text-gray-700">{selectedReport.description}</p>
+                                    <strong className="text-sm sm:text-base">Description:</strong>
+                                    <p className="mt-1 text-gray-700 break-words text-sm sm:text-base">{selectedReport.description}</p>
                                 </div>
                                 
                                 {selectedReport.images && selectedReport.images.length > 0 && (
                                     <div>
-                                        <strong>Images:</strong>
+                                        <strong className="text-sm sm:text-base">Images:</strong>
                                         <div className="mt-2 grid grid-cols-2 gap-2">
                                             {selectedReport.images.map((image, index) => {
                                                 const imageUrl = image.image_url.startsWith('http') ? image.image_url : `http://localhost:5000${image.image_url}`;
@@ -283,11 +299,11 @@ export default function MainMap() {
                                                         key={image.id || index}
                                                         src={imageUrl}
                                                         alt={`Report image ${index + 1}`}
-                                                        className="w-full h-20 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                                                        className="w-full h-16 sm:h-20 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
                                                         onClick={() => handleImageClick(imageUrl)}
                                                         onError={(e) => {
                                                             console.error('Image load error:', image.image_url);
-                                                            e.target.style.display = 'none';
+                                                            e.target.classList.add('hidden');
                                                         }}
                                                     />
                                                 );
@@ -296,7 +312,7 @@ export default function MainMap() {
                                     </div>
                                 )}
                                 
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs sm:text-sm text-gray-500">
                                     {selectedReport.validated_at && (
                                         <p>Validated: {new Date(selectedReport.validated_at).toLocaleDateString()}</p>
                                     )}
@@ -322,10 +338,10 @@ export default function MainMap() {
                     className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
                     onClick={closeExpandedImage}
                 >
-                    <div className="relative max-w-4xl max-h-full p-4">
+                    <div className="relative max-w-[90vw] max-h-[90vh] sm:max-w-4xl sm:max-h-full p-2 sm:p-4">
                         <button
                             onClick={closeExpandedImage}
-                            className="absolute top-2 right-2 text-white text-3xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75"
+                            className="absolute top-1 right-1 sm:top-2 sm:right-2 text-white text-2xl sm:text-3xl bg-black bg-opacity-50 rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-opacity-75"
                         >
                             ✕
                         </button>
