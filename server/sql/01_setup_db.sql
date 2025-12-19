@@ -1,8 +1,5 @@
--- Create the database (run this as a superuser or adjust accordingly)
-CREATE DATABASE coastal_reports_db;
-
--- Connect to the new database
-\c coastal_reports_db
+CREATE SCHEMA IF NOT EXISTS coastal_reports;
+SET search_path TO coastal_reports;
 
 -- Create an ENUM type for categories
 CREATE TYPE report_category AS ENUM (

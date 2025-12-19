@@ -1,3 +1,5 @@
+SET search_path TO coastal_reports;
+
 -- Insert dummy data into admins table
 -- Note: Using dummy hashed passwords (in reality, use proper hashing like bcrypt)
 INSERT INTO admins (username, password_hash, email, created_at, last_login)

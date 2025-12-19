@@ -1,12 +1,39 @@
-# React + Vite
+# BeachWatchPR Client (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This front‑end depends on the BeachWatchPR back‑end API being available first.
 
-Currently, two official plugins are available:
+## Prerequisites
+- Node.js 18+ and npm
+- Running API at `http://localhost:5000`
+	- Start the API via Docker (recommended): from repo root, `docker compose up -d server`
+	- Or run it locally: see [server/README.md](../server/README.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Run (Development)
+```bash
+cd client
+npm install
+npm run dev
+```
+- Vite dev server: http://localhost:5173
+- The app calls the API at `http://localhost:5000`.
 
-## Expanding the ESLint configuration
+## Build & Preview (Production-like)
+```bash
+cd client
+npm run build
+npm run preview
+```
+- Preview server: http://localhost:4173 (API remains at `http://localhost:5000`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Docker Option
+To run the client with Docker alongside the API, from the repo root:
+```bash
+docker compose up -d client server
+```
+- Client: http://localhost
+- API: http://localhost:5000
+
+## Configuration Note
+The API base URL is currently referenced directly as `http://localhost:5000` in
+[client/src/utils/dataHandler.js](src/utils/dataHandler.js). Update this if your
+API runs on a different origin.
