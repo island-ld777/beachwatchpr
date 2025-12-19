@@ -12,7 +12,7 @@ class ReportsController {
             await this.db.query('BEGIN');
 
             const result = await this.db.query(
-                'INSERT INTO reports (email, category, description, latitude, longitude) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                'INSERT INTO coastal_reports.reports (email, category, description, latitude, longitude) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                 [email, category, description, latitude, longitude]
             );
 
@@ -22,7 +22,7 @@ class ReportsController {
                 for (const file of files) {
                     const imageUrl = `/uploads/images/${file.filename}`;
                     await this.db.query(
-                        'INSERT INTO images (report_id, image_url) VALUES ($1, $2)',
+                        'INSERT INTO coastal_reports.images (report_id, image_url) VALUES ($1, $2)',
                         [reportId, imageUrl]
                     )
                 }
@@ -51,7 +51,7 @@ class ReportsController {
             }
 
             const result = await this.db.query(
-                'UPDATE reports SET status = $1, validated_at = CURRENT_TIMESTAMP WHERE id = $2 AND status = $3 RETURNING *',
+                'UPDATE coastal_reports.reports SET status = $1, validated_at = CURRENT_TIMESTAMP WHERE id = $2 AND status = $3 RETURNING *',
                 [status, id, 'pending']
             );
 
@@ -70,8 +70,8 @@ class ReportsController {
     }
 
     async getCompleteReport(reportId) {
-        const reportResult = await this.db.query('SELECT * FROM reports WHERE id = $1', [reportId]);
-        const imagesResult = await this.db.query('SELECT * FROM images WHERE report_id = $1', [reportId]);
+        const reportResult = await this.db.query('SELECT * FROM coastal_reports.reports WHERE id = $1', [reportId]);
+        const imagesResult = await this.db.query('SELECT * FROM coastal_reports.images WHERE report_id = $1', [reportId]);
 
         return {
             ...reportResult.rows[0],
@@ -93,14 +93,15 @@ class ReportsController {
                         ) FILTER (WHERE i.id IS NOT NULL),
                          '[]'
                     ) as images
-                FROM reports r
-                LEFT JOIN images i ON r.id = i.report_id
+                FROM coastal_reports.reports r
+                LEFT JOIN coastal_reports.images i ON r.id = i.report_id
                 GROUP BY r.id
                 ORDER BY r.created_at DESC
             `);
 
             res.status(200).json(result.rows);
         } catch (error) {
+            console.error("Error fetching reports: ", error);
             res.status(500).json({ error: 'Failed to fetch reports' });
         }
     }
@@ -114,6 +115,7 @@ class ReportsController {
             }
             res.status(200).json(result);
         } catch (error) {
+            console.error("Error creating report: ", error);
             res.status(500).json({ error: 'Failed to fetch report' });
         }
     }
@@ -123,7 +125,7 @@ class ReportsController {
         const { title, description } = req.body;
         try {
             const result = await this.db.query(
-                'UPDATE reports SET title = $1, description = $2 WHERE id = $3 RETURNING *',
+                'UPDATE coastal_reports.reports SET title = $1, description = $2 WHERE id = $3 RETURNING *',
                 [title, description, id]
             );
             if (result.rows.length === 0) {
@@ -131,6 +133,7 @@ class ReportsController {
             }
             res.status(200).json(result.rows[0]);
         } catch (error) {
+            console.error("Error updating report: ", error);
             res.status(500).json({ error: 'Failed to update report' });
         }
     }
@@ -138,12 +141,13 @@ class ReportsController {
     async deleteReport(req, res) {
         const { id } = req.params;
         try {
-            const result = await this.db.query('DELETE FROM reports WHERE id = $1 RETURNING *', [id]);
+            const result = await this.db.query('DELETE FROM coastal_reports.reports WHERE id = $1 RETURNING *', [id]);
             if (result.rows.length === 0) {
                 return res.status(404).json({ error: 'Report not found' });
             }
             res.status(204).send();
         } catch (error) {
+            console.error("Error deleting report: ", error);
             res.status(500).json({ error: 'Failed to delete report' });
         }
     }
