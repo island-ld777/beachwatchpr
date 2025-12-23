@@ -1,6 +1,10 @@
 # BeachWatchPR
 
-A full‑stack web application using the PERN (PostgreSQL, Express.js, React, Node.js) stack.
+A full‑stack coastal reporting application using the PERN (PostgreSQL, Express.js, React, Node.js) stack.
+
+![alt text](screenshot1.png)
+![alt text](screenshot2.png)
+
 
 ## Purpose
 The purpose of this application is to keep track of illicit incidents ocurring on the coastlines of Puerto Rico. This is a Proof of Concept application to validate the idea of having a reporting system housing records of illegal environmental activities. Ideally, this application will serve for environmental non-profit organizations that specialize in reporting local environmental issues.
